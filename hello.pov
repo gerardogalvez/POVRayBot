@@ -1,4 +1,4 @@
-#include "colors.inc"
+#include "/app/.apt/usr/lib/x86_64-linux-gnu/pulseaudio/:/app/.apt/lib/x86_64-linux-gnu/colors.inc"
 
 camera{
 	location <2, 2, -10>
