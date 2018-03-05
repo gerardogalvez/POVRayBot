@@ -1,4 +1,4 @@
-#include "colors.inc"
+#include "~/.apt/usr/share/povray-3.7/include/colors.inc"
 
 camera{
 	location <2, 2, -10>
