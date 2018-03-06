@@ -1,7 +1,7 @@
 const Twit = require('twit');
 const fs = require('fs');
 const path = require('path');
-const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
 
 var config = {
      consumer_key: process.env.BOT_CONSUMER_KEY,
@@ -60,7 +60,7 @@ if(bSpecular){
      }
 }
 
-exec(command, (error, stdout, stderr) => {
+execSync(command, (error, stdout, stderr) => {
   if (error) {
     console.error('exec error: ${error}');
   }
@@ -69,7 +69,7 @@ exec(command, (error, stdout, stderr) => {
   console.log('stderr: ${stderr}');
 });
 
-var image_path = path.join(__dirname, 'hello.png');
+var image_path = path.join(__dirname, '/hello.png');
 var b64content = fs.readFileSync(image_path, { encoding: 'base64' });
 
 T.post('media/upload', { media_data: b64content }, function (err, data, response) {
@@ -96,12 +96,3 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
           );
      }
 });
-
-
-
-
-
-
-
-
-
