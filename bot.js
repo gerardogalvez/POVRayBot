@@ -62,7 +62,7 @@ if(bSpecular){
 
 exec(command);
 
-var image_path = path.join(__dirname, '/hello.png');
+var image_path = path.join(__dirname, 'hello.png');
 var b64content = fs.readFileSync(image_path, { encoding: 'base64' });
 
 T.post('media/upload', { media_data: b64content }, function (err, data, response) {
