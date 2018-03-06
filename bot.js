@@ -62,6 +62,15 @@ if(bSpecular){
 
 exec(command);
 
+exec(command, (error, stdout, stderr) => {
+  if (error) {
+    console.error('exec error: ${error}');
+  }
+
+  console.log('stdout: ${stdout}');
+  console.log('stderr: ${stderr}');
+});
+
 var image_path = path.join(__dirname, 'hello.png');
 var b64content = fs.readFileSync(image_path, { encoding: 'base64' });
 
