@@ -1,6 +1,7 @@
-var Twit = require('twit');
-var fs = require('fs');
-var path = require('path');
+const Twit = require('twit');
+const fs = require('fs');
+const path = require('path');
+const execSync = require('child_process').execSync;
 
 var config = {
      consumer_key: process.env.BOT_CONSUMER_KEY,
@@ -11,23 +12,87 @@ var config = {
 
 var T = new Twit(config);
 
-var phraseArray = [ "hey twitter",
-                    "im tweeting",
-                    "tweet tweet",
-                    "tweetstorm time... 1/22",
-                    "plz RT v important",
-                    "delete ur account",
-                    "it me",
-                    "same",
-                    "#dogpants go on 4 legs!!",
-                    "#thedress is blue and black" ];
+var bAmbient = Math.random() > 0.5;
+var bDiffuse = Math.random() > 0.5;
+var bReflection = Math.random() > 0.5;
+var bSpecular = Math.random() > 0.5;
+var bRoughness = Math.random() > 0.5;
 
-function chooseRandom(myArray) {
-  return myArray[Math.floor(Math.random() * myArray.length)];
+var fAmbient = Math.random();
+var fDiffuse = Math.random();
+var fReflection = Math.random();
+var fSpecular = Math.random();
+var fRoughness = Math.random() * (1.0 - 0.0005) + 0.0005;
+
+var randRed = Math.random();
+var randGreen = Math.random();
+var randBlue = Math.random();
+
+var ambientParameter = ' Declare=bAmbient=' + bAmbient.toString() + ' Declare=fAmbient=' + fAmbient.toFixed(4);
+var diffuseParameter = ' Declare=bDiffuse=' + bDiffuse.toString() + ' Declare=fDiffuse=' + fDiffuse.toFixed(4);
+var reflectionParameter = ' Declare=bReflection=' + bReflection.toString() + ' Declare=fReflection=' + fReflection.toFixed(4);
+var specularParameter = ' Declare=bSpecular=' + bSpecular.toString() + ' Declare=fSpecular=' + fSpecular.toFixed(4);
+var roughnessParameter = ' Declare=bRoughness=' + bRoughness.toString() + ' Declare=fRoughness=' + fRoughness.toFixed(4);
+var colorsParameter = ' Declare=randRed=' + randRed.toFixed(3) + ' Declare=randGreen=' + randGreen.toFixed(4) + ' Declare=randBlue=' + randBlue.toFixed(4);
+
+var command = 'povray' + ambientParameter + diffuseParameter + reflectionParameter + specularParameter + roughnessParameter + colorsParameter + ' hello.pov';
+
+var tweetText = '<R, G, B> = <' + randRed.toFixed(4) + ', ' + randGreen.toFixed(4) + ', ' + randBlue.toFixed(4) + '>\n';
+
+if(bAmbient){
+     tweetText += 'Ambient: ' + fAmbient.toFixed(4) + '\n';
 }
 
-var phrase = chooseRandom(phraseArray) + ", " + chooseRandom(phraseArray);
+if(bDiffuse){
+     tweetText += 'Diffuse: ' + fDiffuse.toFixed(4) + '\n';
+}
 
-T.post('statuses/update', { status: phrase }, function(err, data, response) {
-  console.log(data)
+if(bReflection){
+     tweetText += 'Reflection: ' + fReflection.toFixed(4) + '\n';
+}
+
+if(bSpecular){
+     tweetText += 'Specular: ' + fSpecular.toFixed(4) + '\n';
+     if(bRoughness){
+          tweetText += 'Roughness: ' + fRoughness.toFixed(4) + '\n';
+     }
+}
+
+execSync(command);
+
+var image_path = path.join(__dirname, '/hello.png');
+var b64content = fs.readFileSync(image_path, { encoding: 'base64' });
+
+T.post('media/upload', { media_data: b64content }, function (err, data, response) {
+     if (err){
+          console.log('ERROR:');
+          console.log(err);
+     }
+     else{
+          console.log('Image uploaded!');
+          console.log('Now tweeting it...');
+          T.post('statuses/update', {
+               media_ids: new Array(data.media_id_string),
+               status: tweetText
+          },
+               function(err, data, response) {
+                    if (err){
+                         console.log('ERROR:');
+                         console.log(err);
+                    }
+                    else{
+                         console.log('Posted an image!');
+                    }
+               }
+          );
+     }
 });
+
+
+
+
+
+
+
+
+
