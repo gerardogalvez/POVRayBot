@@ -1,7 +1,7 @@
 const Twit = require('twit');
 const fs = require('fs');
 const path = require('path');
-const execSync = require('child_process').execSync;
+const exec = require('child_process').exec;
 
 var config = {
      consumer_key: process.env.BOT_CONSUMER_KEY,
@@ -60,7 +60,7 @@ if(bSpecular){
      }
 }
 
-execSync(command);
+exec(command);
 
 var image_path = path.join(__dirname, '/hello.png');
 var b64content = fs.readFileSync(image_path, { encoding: 'base64' });
