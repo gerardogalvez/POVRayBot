@@ -17,6 +17,8 @@ var bDiffuse = Math.random() > 0.5;
 var bReflection = Math.random() > 0.5;
 var bSpecular = Math.random() > 0.5;
 var bRoughness = Math.random() > 0.5;
+var bPhong = Math.random() > 0.5;
+var bPhongSize = Math.random() > 0.5;
 
 var fAmbient = Math.random();
 var fDiffuse = Math.random();
@@ -35,7 +37,7 @@ var specularParameter = ' Declare=bSpecular=' + bSpecular.toString() + ' Declare
 var roughnessParameter = ' Declare=bRoughness=' + bRoughness.toString() + ' Declare=fRoughness=' + fRoughness.toFixed(4);
 var colorsParameter = ' Declare=randRed=' + randRed.toFixed(3) + ' Declare=randGreen=' + randGreen.toFixed(4) + ' Declare=randBlue=' + randBlue.toFixed(4);
 
-var command = 'povray' + ambientParameter + diffuseParameter + reflectionParameter + specularParameter + roughnessParameter + colorsParameter + ' hello.pov';
+var command = 'povray -W800 -H600' + ambientParameter + diffuseParameter + reflectionParameter + specularParameter + roughnessParameter + colorsParameter + ' hello.pov';
 
 var tweetText = '<R, G, B> = <' + randRed.toFixed(4) + ', ' + randGreen.toFixed(4) + ', ' + randBlue.toFixed(4) + '>\n';
 
